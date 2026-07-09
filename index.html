@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday — Reha Apu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            cormorant: ['Cormorant Garamond', 'serif'],
+          },
+          colors: {
+            gold: {
+              300: '#fdf1d4',
+              500: '#d4b87a',
+              700: '#8a6c38',
+            },
+            night: {
+              900: '#020204',
+              800: '#0a0a12',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-dark: #020204;
+      --bg-light: #0a0a12;
+      --gold: #d4b87a;
+      --gold-light: #fdf1d4;
+      --gold-dark: #8a6c38;
+      --text: #ede8e0;
+      --text-muted: #8b8698;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: radial-gradient(circle at center, var(--bg-light) 0%, var(--bg-dark) 100%);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      cursor: crosshair;
+    }
+
+    ::selection { background: rgba(212, 184, 122, 0.25); color: var(--gold-light); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: rgba(212, 184, 122, 0.4); border-radius: 4px; }
+
+    #starsCanvas {
+      position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+    }
+
+    /* Ambient Nebulas */
+    .nebula {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.25;
+      animation: drift 25s infinite alternate ease-in-out;
+    }
+    .nebula-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(138, 108, 56, 0.15); }
+    .nebula-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(212, 184, 122, 0.1); animation-delay: -12s; }
+
+    @keyframes drift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 40px) scale(1.05); }
+    }
+
+    #mainPage { position: relative; z-index: 3; opacity: 1; pointer-events: auto; }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(10, 10, 18, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 184, 122, 0.1);
+      border-top: 1px solid rgba(253, 241, 212, 0.2);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(212, 184, 122, 0.03);
+      border-radius: 24px;
+    }
+
+    .typing-cursor::after {
+      content: '|'; color: var(--gold); margin-left: 4px;
+      animation: cursorBlink 0.8s step-end infinite;
+      font-weight: 300; text-shadow: 0 0 8px var(--gold);
+    }
+    @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .reveal {
+      opacity: 0; transform: translateY(40px) scale(0.98);
+      transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1), transform 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+    /* Scaled down font sizes for elegance */
+    .happy-birthday {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(35px, 8vw, 75px);
+      font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-light) 30%, #ffffff 50%, var(--gold-light) 70%, var(--gold-dark) 100%);
+      background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 7s linear infinite; filter: drop-shadow(0 0 30px rgba(212, 184, 122, 0.25));
+    }
+    @keyframes shimmer { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+
+    .name-reveal {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 9vw, 85px);
+      font-weight: 500; font-style: italic; color: var(--gold-light); letter-spacing: 0.15em;
+      text-shadow: 0 0 40px rgba(253, 241, 212, 0.4), 0 0 15px rgba(212, 184, 122, 0.3);
+    }
+
+    .dist-line {
+      width: 1px; height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      margin: 0 auto; opacity: 0.5;
+    }
+
+    .story-section {
+      min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 24px; position: relative;
+    }
+
+    .text-glow { text-shadow: 0 2px 20px rgba(237, 232, 224, 0.1); }
+    .highlight-gold {
+      color: var(--gold-light); font-weight: 500; font-style: italic;
+      text-shadow: 0 0 20px rgba(212, 184, 122, 0.4);
+    }
+
+    /* Surprise Box Interactions */
+    .surprise-orb {
+      width: 55px; height: 55px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(253, 241, 212, 0.15), rgba(212, 184, 122, 0.05));
+      border: 1px solid rgba(212, 184, 122, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 25px rgba(212, 184, 122, 0.15), inset 0 0 15px rgba(212, 184, 122, 0.05);
+      cursor: pointer; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: floatOrb 5s ease-in-out infinite, pulseOrb 3s infinite;
+    }
+    .surprise-orb:hover {
+      transform: scale(1.15); border-color: var(--gold-light);
+      box-shadow: 0 0 40px rgba(212, 184, 122, 0.4), inset 0 0 25px rgba(253, 241, 212, 0.2);
+    }
+    @keyframes floatOrb { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes pulseOrb { 0% { box-shadow: 0 0 0 0 rgba(212, 184, 122, 0.3); } 70% { box-shadow: 0 0 0 15px rgba(212, 184, 122, 0); } 100% { box-shadow: 0 0 0 0 rgba(212, 184, 122, 0); } }
+
+    .hidden-message {
+      display: none; opacity: 0; transform: translateY(15px) scale(0.98);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Burst Particles */
+    .burst-particle {
+      position: fixed; pointer-events: none; z-index: 10000; border-radius: 50%;
+      background: #fff; box-shadow: 0 0 12px var(--gold-light), 0 0 25px var(--gold);
+    }
+    .cursor-sparkle {
+      position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%;
+      background: var(--gold-light); box-shadow: 0 0 8px var(--gold);
+      animation: sparkleFade 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    @keyframes sparkleFade { 0% { transform: scale(1) translateY(0); opacity: 0.6; } 100% { transform: scale(0) translateY(-15px); opacity: 0; } }
+  </style>
+</head>
+<body>
+
+  <!-- Background Canvas & Effects -->
+  <canvas id="starsCanvas"></canvas>
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+  <div class="fixed inset-0 pointer-events-none z-[2]" style="background: radial-gradient(ellipse at center, transparent 20%, rgba(2, 2, 4, 0.85) 100%);"></div>
+
+  <div id="mainPage">
+
+    <!-- 1. Opening Lines -->
+    <section class="story-section text-center min-h-screen">
+      <div class="glass-card p-10 md:p-14 max-w-3xl mx-auto w-[90%] md:w-full">
+        <p id="line1" class="text-xl md:text-3xl font-light tracking-wide leading-loose text-glow" style="opacity:0;"></p>
+        <p id="line2" class="text-lg md:text-xl italic tracking-widest mt-6 leading-loose text-text-muted" style="opacity:0;"></p>
+        <p id="line3" class="text-xl md:text-2xl tracking-widest mt-6 leading-loose text-gold-300" style="opacity:0;"></p>
+        <p id="line4" class="text-lg md:text-xl italic tracking-wide mt-6 leading-loose text-gold-500 text-glow" style="opacity:0;"></p>
+      </div>
+      
+      <div id="scrollHint" class="opacity-0 transition-opacity duration-1000 mt-16 flex flex-col items-center">
+        <p class="text-[10px] tracking-[0.6em] uppercase mb-4 font-medium text-text-muted">Descend into the magic</p>
+        <i data-lucide="chevron-down" class="w-5 h-5 text-gold-500 animate-bounce opacity-70"></i>
+      </div>
+    </section>
+
+    <!-- 2. Happy Birthday -->
+    <section class="story-section text-center">
+      <div class="reveal">
+        <h1 class="happy-birthday">Happy Birthday</h1>
+        <div class="dist-line mt-12 mb-12"></div>
+        <p class="name-reveal">Reha Apu</p>
+      </div>
+    </section>
+
+    <!-- 3. The Birth -->
+    <section class="story-section text-center">
+      <div class="reveal glass-card p-10 md:p-14 max-w-3xl mx-auto w-[90%] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-gold-500 opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+        <p class="text-xl md:text-3xl font-light leading-loose text-glow">
+          On this exact day, the universe made its greatest decision.<br />
+          It decided to paint a little more grace into our world.<br /><br />
+          A soul so incredibly pure, a heart so deeply kind—<br />
+          <span class="highlight-gold text-2xl md:text-4xl block mt-4">you arrived, and everything changed for the better.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- SURPRISE 1 -->
+    <section class="py-16 flex flex-col items-center justify-center relative z-10 reveal">
+      <div class="dist-line mb-8"></div>
+      <div class="surprise-container flex flex-col items-center relative w-full max-w-2xl px-6">
+        <div class="trigger text-center group">
+          <div class="surprise-orb mx-auto mb-4" onclick="revealSurprise(this)">
+            <i data-lucide="sparkles" class="w-6 h-6 text-gold-500 group-hover:text-gold-300 transition-colors"></i>
+          </div>
+          <p class="text-[10px] tracking-[0.4em] uppercase text-text-muted group-hover:text-gold-500 transition-colors cursor-pointer" onclick="revealSurprise(this.previousElementSibling)">Tap to reveal a thought</p>
+        </div>
+        <div class="hidden-message glass-card w-full p-8 mt-4 text-center">
+          <p class="text-lg md:text-2xl italic text-gold-300 leading-loose font-light">
+            "Before I met you, I didn't know someone's mere existence could feel like a deep, calming breath of fresh air. You are truly a piece of peace."
+          </p>
+        </div>
+      </div>
+      <div class="dist-line mt-8"></div>
+    </section>
+
+    <!-- 4. The Aura -->
+    <section class="story-section text-center">
+      <div class="reveal max-w-3xl mx-auto px-6">
+        <i data-lucide="sun-dim" class="w-10 h-10 mx-auto mb-10 text-gold-500 filter drop-shadow-[0_0_12px_rgba(212,184,122,0.4)] opacity-80"></i>
+        <p class="text-xl md:text-3xl font-light leading-loose text-glow">
+          You have this unexplainable, beautiful gift.<br /><br />
+          The way you speak, the way you think, the way you unconditionally care—<br />
+          <span class="highlight-gold text-2xl md:text-4xl block mt-4 mb-4">it can reshape any mind.</span><br />
+          You bring absolute clarity to my chaos and brilliant light to my shadows.
+        </p>
+      </div>
+    </section>
+
+    <!-- SURPRISE 2 -->
+    <section class="py-16 flex flex-col items-center justify-center relative z-10 reveal">
+      <div class="dist-line mb-8"></div>
+      <div class="surprise-container flex flex-col items-center relative w-full max-w-2xl px-6">
+        <div class="trigger text-center group">
+          <div class="surprise-orb mx-auto mb-4" onclick="revealSurprise(this)">
+            <i data-lucide="music" class="w-6 h-6 text-gold-500 group-hover:text-gold-300 transition-colors"></i>
+          </div>
+          <p class="text-[10px] tracking-[0.4em] uppercase text-text-muted group-hover:text-gold-500 transition-colors cursor-pointer" onclick="revealSurprise(this.previousElementSibling)">Tap to reveal a truth</p>
+        </div>
+        <div class="hidden-message glass-card w-full p-8 mt-4 text-center">
+          <p class="text-lg md:text-2xl italic text-gold-300 leading-loose font-light">
+            "Your voice, your songs... they are the background music to my happiest thoughts. Every note you sing can heal a part of the heart."
+          </p>
+        </div>
+      </div>
+      <div class="dist-line mt-8"></div>
+    </section>
+
+    <!-- 5. Sisterly Bond & Distance -->
+    <section class="story-section text-center">
+      <div class="reveal glass-card p-10 md:p-14 max-w-3xl mx-auto w-[90%] relative overflow-hidden">
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-gold-500 opacity-10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+        <p class="text-xl md:text-3xl font-light leading-loose text-glow">
+          They often say family is bound by blood,<br />
+          but I have learned that souls are truly bound by love.<br /><br />
+          Having you as my <span class="highlight-gold text-3xl md:text-5xl mx-2">"Sister"</span> is a profound blessing.<br /><br />
+          A thousand kilometers can stretch between us,<br />
+          yet I have never felt closer to another human being.<br />
+          Our bond is woven with indestructible threads of deep understanding.
+        </p>
+      </div>
+    </section>
+
+    <!-- SURPRISE 3 -->
+    <section class="py-16 flex flex-col items-center justify-center relative z-10 reveal">
+      <div class="dist-line mb-8"></div>
+      <div class="surprise-container flex flex-col items-center relative w-full max-w-2xl px-6">
+        <div class="trigger text-center group">
+          <div class="surprise-orb mx-auto mb-4" onclick="revealSurprise(this)">
+            <i data-lucide="star" class="w-6 h-6 text-gold-500 group-hover:text-gold-300 transition-colors"></i>
+          </div>
+          <p class="text-[10px] tracking-[0.4em] uppercase text-text-muted group-hover:text-gold-500 transition-colors cursor-pointer" onclick="revealSurprise(this.previousElementSibling)">Tap for a secret</p>
+        </div>
+        <div class="hidden-message glass-card w-full p-8 mt-4 text-center">
+          <p class="text-lg md:text-2xl italic text-gold-300 leading-loose font-light">
+            "Some people spend their whole lives looking for magic in the stars. I found magic in you."
+          </p>
+        </div>
+      </div>
+      <div class="dist-line mt-8"></div>
+    </section>
+
+    <!-- 6. The Affirmation -->
+    <section class="story-section text-center">
+      <div class="reveal max-w-3xl mx-auto px-6">
+        <i data-lucide="wand-2" class="w-10 h-10 mx-auto mb-10 text-gold-500 filter drop-shadow-[0_0_12px_rgba(212,184,122,0.4)] opacity-80"></i>
+        <p class="text-xl md:text-3xl font-light leading-loose text-glow">
+          Whenever you read this, I want you to remember one vital truth:<br /><br />
+          <span class="highlight-gold text-3xl md:text-5xl block my-6">The world is a much better place</span>
+          simply because you are breathing in it.<br /><br />
+          Your existence is my absolute favorite kind of magic.
+        </p>
+      </div>
+    </section>
+
+    <!-- 7. The Grand Finale -->
+    <section class="story-section text-center pt-16">
+      <div class="reveal w-full max-w-3xl mx-auto px-6">
+        
+        <p class="text-3xl md:text-5xl lg:text-6xl font-light leading-loose text-glow highlight-gold font-cinzel">
+          You deserve it all,<br/>and infinitely more.
+        </p>
+
+        <div class="dist-line mt-20 mb-20 h-24"></div>
+
+        <p class="text-xl md:text-2xl font-medium leading-loose text-gold-300 uppercase tracking-[0.25em] mb-12">
+          Happy Birthday, my dearest Reha Apu.
+        </p>
+
+        <div>
+          <p class="font-cinzel text-3xl md:text-5xl tracking-widest text-glow">— Anik</p>
+          <p class="text-xs mt-6 tracking-[0.5em] opacity-50 uppercase text-gold-500">Dhaka, Bangladesh</p>
+        </div>
+
+        <!-- The Final Grand Surprise -->
+        <div class="mt-28 flex flex-col items-center justify-center relative pb-28">
+          
+          <div id="grandGiftBtn" class="group relative cursor-pointer" onclick="revealGrandGift(this)">
+            <div class="absolute inset-0 bg-gold-500 rounded-full blur-2xl opacity-30 group-hover:opacity-60 transition-opacity duration-700 animate-pulse"></div>
+            <div class="relative w-20 h-20 bg-night-800/80 border border-gold-500/50 rounded-full flex items-center justify-center backdrop-blur-xl transition-all duration-500 group-hover:scale-105 group-hover:border-gold-300 shadow-[0_0_30px_rgba(212,184,122,0.2)]">
+              <i data-lucide="gift" class="w-8 h-8 text-gold-500 group-hover:text-gold-300 transition-colors duration-500"></i>
+            </div>
+            <p class="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-[0.5em] uppercase text-gold-500 font-medium opacity-60 group-hover:opacity-100 transition-opacity duration-500">Tap to unwrap</p>
+          </div>
+
+          <!-- Final Secret Message -->
+          <div id="grandHiddenMessage" class="hidden opacity-0 transform translate-y-8 transition-all duration-1000 mt-8 w-full max-w-2xl">
+            <div class="glass-card p-10 relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-50"></div>
+              <p class="text-xl md:text-3xl font-light italic leading-loose text-gold-300 text-glow">
+                "No matter where life takes us, or how many years pass by, my prayers will always whisper your name. May your life be as breathtakingly beautiful as the love you give to others."
+              </p>
+              <div class="mt-10 flex justify-center">
+                <i data-lucide="heart" class="w-8 h-8 text-gold-500 fill-gold-500/80 filter drop-shadow-[0_0_12px_rgba(212,184,122,0.6)] animate-bounce"></i>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // ── Starry Canvas & Shooting Stars ──
+    const canvas = document.getElementById('starsCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const stars = [];
+    const shootingStars = [];
+
+    for (let i = 0; i < 200; i++) {
+      stars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.2 + 0.3,
+        alpha: Math.random() * 0.7 + 0.1,
+        speed: Math.random() * 0.003 + 0.001,
+        offset: Math.random() * Math.PI * 2
+      });
+    }
+
+    function drawCanvas(time) {
+      ctx.clearRect(0, 0, width, height);
+      const t = time * 0.001;
+      
+      stars.forEach(s => {
+        const twinkle = Math.sin(t * s.speed * 20 + s.offset) * 0.3 + 0.7;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(253, 241, 212, ${s.alpha * twinkle})`;
+        if (s.r > 1.0) {
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = 'rgba(212, 184, 122, 0.6)';
+        } else {
+          ctx.shadowBlur = 0;
+        }
+        ctx.fill();
+      });
+
+      if (Math.random() < 0.008) {
+        shootingStars.push({
+          x: Math.random() * width * 1.5, y: -50,
+          len: Math.random() * 80 + 40, speed: Math.random() * 12 + 12,
+          angle: Math.PI / 4 + (Math.random() * 0.2 - 0.1), opacity: 0.8
+        });
+      }
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const ss = shootingStars[i];
+        const endX = ss.x - Math.cos(ss.angle) * ss.len;
+        const endY = ss.y - Math.sin(ss.angle) * ss.len;
+
+        const grad = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
+        grad.addColorStop(0, `rgba(253, 241, 212, ${ss.opacity})`);
+        grad.addColorStop(1, 'rgba(212, 184, 122, 0)');
+
+        ctx.beginPath(); ctx.moveTo(ss.x, ss.y); ctx.lineTo(endX, endY);
+        ctx.strokeStyle = grad; ctx.lineWidth = 1.5; ctx.stroke();
+
+        ss.x -= Math.cos(ss.angle) * ss.speed;
+        ss.y -= Math.sin(ss.angle) * ss.speed;
+        ss.opacity -= 0.012;
+
+        if (ss.opacity <= 0 || ss.y > height + 100) shootingStars.splice(i, 1);
+      }
+      requestAnimationFrame(drawCanvas);
+    }
+    requestAnimationFrame(drawCanvas);
+
+    // ── Stardust Cursor Trail ──
+    let lastMove = 0;
+    window.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastMove < 35) return; 
+      lastMove = now;
+
+      const p = document.createElement('div');
+      p.className = 'cursor-sparkle';
+      const size = Math.random() * 3 + 1.5;
+      p.style.width = size + 'px'; p.style.height = size + 'px';
+      p.style.left = (e.clientX - size/2) + 'px'; p.style.top = (e.clientY - size/2) + 'px';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 900);
+    });
+
+    // ── Typing Sequence ──
+    async function type(el, text, speed = 55) {
+      el.style.opacity = '1';
+      el.classList.add('typing-cursor');
+      el.textContent = '';
+      for (let i = 0; i < text.length; i++) {
+        el.textContent += text[i];
+        await new Promise(r => setTimeout(r, speed));
+      }
+      setTimeout(() => el.classList.remove('typing-cursor'), 400);
+    }
+
+    async function initSequence() {
+      await new Promise(r => setTimeout(r, 800));
+      await type(document.getElementById('line1'), 'Take a slow, deep breath, Reha Apu...', 60);
+      await new Promise(r => setTimeout(r, 800));
+      await type(document.getElementById('line2'), 'Close your eyes for a moment, and truly imagine...', 50);
+      await new Promise(r => setTimeout(r, 800));
+      await type(document.getElementById('line3'), 'Today is the 8th of July.', 60);
+      await new Promise(r => setTimeout(r, 800));
+      await type(document.getElementById('line4'), 'The exact day the world became infinitely brighter.', 50);
+      
+      document.getElementById('scrollHint').style.opacity = '1';
+      initObserver();
+    }
+
+    // ── Scroll Reveal ──
+    function initObserver() {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+    // ── Interaction: Intermediate Surprises ──
+    function revealSurprise(el) {
+      const triggerContainer = el.closest('.trigger');
+      const container = el.closest('.surprise-container');
+      const content = container.querySelector('.hidden-message');
+      
+      const rect = el.getBoundingClientRect();
+      createBurst(rect.left + rect.width/2, rect.top + rect.height/2, 30);
+
+      triggerContainer.style.transition = 'all 0.5s ease';
+      triggerContainer.style.opacity = '0';
+      triggerContainer.style.transform = 'scale(0.85)';
+      
+      setTimeout(() => {
+        triggerContainer.style.display = 'none';
+        content.style.display = 'block';
+        void content.offsetWidth;
+        content.style.opacity = '1';
+        content.style.transform = 'translateY(0) scale(1)';
+      }, 450);
+    }
+
+    // ── Interaction: Grand Final Gift ──
+    function revealGrandGift(btn) {
+      const rect = btn.getBoundingClientRect();
+      createBurst(rect.left + rect.width/2, rect.top + rect.height/2, 80);
+      
+      btn.style.transition = 'all 0.6s ease';
+      btn.style.opacity = '0';
+      btn.style.transform = 'scale(0.5)';
+      
+      const msg = document.getElementById('grandHiddenMessage');
+      setTimeout(() => {
+        btn.style.display = 'none';
+        msg.style.display = 'block';
+        void msg.offsetWidth;
+        msg.style.opacity = '1';
+        msg.style.transform = 'translateY(0)';
+      }, 500);
+    }
+
+    // ── Particle Burst Logic ──
+    function createBurst(x, y, count = 35) {
+      const colors = ['#fdf1d4', '#d4b87a', '#ffffff', '#8a6c38'];
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'burst-particle';
+        const size = Math.random() * 5 + 1.5;
+        p.style.width = size + 'px'; p.style.height = size + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.left = x + 'px'; p.style.top = y + 'px';
+        document.body.appendChild(p);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * (count > 50 ? 160 : 90) + 40;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity - 25;
+
+        p.animate([
+          { transform: `translate(-50%, -50%) scale(1)`, opacity: 0.9 },
+          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+        ], {
+          duration: Math.random() * 900 + 700,
+          easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+          fill: 'forwards'
+        });
+
+        setTimeout(() => p.remove(), 1800);
+      }
+    }
+
+    initSequence();
+  </script>
+</body>
+</html>
